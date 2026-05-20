@@ -1,0 +1,21 @@
+{{ 'age-guard.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="AgeGuardRoot-{{ block.id }}"
+  data-age-guard-root
+  data-shop="{{ shop.permanent_domain }}"
+  data-customer-authenticated="{% if customer %}true{% else %}false{% endif %}"
+  data-customer-tags="{{ customer.tags | join: ',' | escape }}"
+  data-config-endpoint="{{ routes.root_url }}apps/age-guard/config"
+  data-event-endpoint="{{ routes.root_url }}apps/age-guard/event"
+></div>
+
+<script src="{{ 'age-guard.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Age Guard",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}
