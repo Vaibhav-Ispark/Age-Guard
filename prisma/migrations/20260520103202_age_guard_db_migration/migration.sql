@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "Session" ALTER COLUMN "expires" SET DATA TYPE TIMESTAMP(3),
+ALTER COLUMN "refreshTokenExpires" SET DATA TYPE TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE "ShopSettings" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMP(3),
+ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE "VerificationEvent" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMP(3);
