@@ -82,12 +82,50 @@
   gap: 10px;
 }
 
-.age-guard-fields input {
+.age-guard-fields input[type="text"],
+.age-guard-fields input[type="number"],
+.age-guard-fields input:not([type="checkbox"]) {
   border: 1px solid #8a8a8a;
   border-radius: 8px;
   font: inherit;
   min-height: 42px;
   padding: 8px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.age-guard-fields label {
+  align-items: center;
+  background: #f9fafb;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 12px;
+  padding: 14px 16px;
+  transition: border-color 150ms ease, background 150ms ease;
+  user-select: none;
+}
+
+.age-guard-fields label:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.age-guard-fields label:has(input:checked) {
+  background: #f0fdf4;
+  border-color: #16a34a;
+}
+
+.age-guard-fields input[type="checkbox"] {
+  accent-color: #16a34a;
+  cursor: pointer;
+  flex-shrink: 0;
+  height: 20px;
+  margin: 0;
+  width: 20px;
 }
 
 @keyframes ageGuardFade {
