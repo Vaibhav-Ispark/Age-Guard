@@ -227,9 +227,21 @@
   function init(root) {
     var endpoint = root.dataset.configEndpoint + "?shop=" + encodeURIComponent(root.dataset.shop);
     fetch(endpoint, { credentials: "same-origin" })
-      .then(function (response) { return response.json(); })
-      .then(function (config) { render(root, config); })
-      .catch(function () {});
+      .then(function (response) {
+        if (!response.ok) {
+          console.error("[AgeGuard] Config fetch failed:", response.status, endpoint);
+          return null;
+        }
+        return response.json();
+      })
+      .then(function (config) {
+        if (!config) return;
+        console.log("[AgeGuard] Config loaded:", config.enabled, "settings:", !!config.settings);
+        render(root, config);
+      })
+      .catch(function (err) {
+        console.error("[AgeGuard] Error:", err, endpoint);
+      });
   }
 
   document.querySelectorAll("[data-age-guard-root]").forEach(init);
