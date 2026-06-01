@@ -511,10 +511,15 @@
 
 /* ─── Buttons ───────────────────────────────────────────────────────────── */
 .ag-row-actions {
-  align-items: center;
+  align-items: stretch;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.ag-row-actions .ag-btn {
+  align-items: center;
+  display: inline-flex;
 }
 
 .ag-btn {
@@ -603,12 +608,15 @@
 /* ─── Metrics ───────────────────────────────────────────────────────────── */
 .ag-metric-grid {
   display: grid;
-  gap: 0;
+  gap: 12px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .ag-metric {
   background: linear-gradient(180deg, rgba(0, 91, 211, 0.04), rgba(255, 255, 255, 0) 70%), #ffffff;
+  border: 1px solid var(--ag-border);
+  border-radius: var(--ag-radius);
+  box-shadow: var(--ag-shadow-sm);
   padding: 16px 18px;
 }
 
