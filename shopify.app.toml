@@ -7,7 +7,6 @@ embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
-include_config_on_deploy = true
 
 [webhooks]
 api_version = "2026-07"
@@ -28,6 +27,6 @@ scopes = "read_customers,write_themes"
 redirect_urls = [ "https://age-guard.vercel.app/api/auth" ]
 
 [app_proxy]
-url = "https://age-guard.vercel.app/api/age-guard"
+url = "https://age-guard.vercel.app/age-guard"
 subpath = "age-guard"
 prefix = "apps"
