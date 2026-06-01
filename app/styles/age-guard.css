@@ -617,7 +617,9 @@
   border: 1px solid var(--ag-border);
   border-radius: var(--ag-radius);
   box-shadow: var(--ag-shadow-sm);
+  overflow: hidden;
   padding: 16px 18px;
+  position: relative;
 }
 
 .ag-metric + .ag-metric {
