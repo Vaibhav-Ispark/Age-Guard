@@ -192,6 +192,87 @@
     });
     enter.className += " age-guard-enter-button";
     enter.addEventListener("click", function () {
+      // Validate checkbox if method is checkbox
+      if (verification.method === "checkbox") {
+        var checkbox = popup.querySelector(".age-guard-fields input[type='checkbox']");
+        if (checkbox && !checkbox.checked) {
+          var existing = popup.querySelector(".age-guard-error");
+          if (!existing) {
+            var error = document.createElement("p");
+            error.className = "age-guard-error";
+            error.textContent = "Please confirm you meet the age requirement to continue.";
+            error.style.color = "#d72c0d";
+            error.style.fontSize = "13px";
+            error.style.margin = "0";
+            error.style.textAlign = "center";
+            buttonRow.parentNode.insertBefore(error, buttonRow);
+          }
+          return;
+        }
+        // Remove error if checkbox is now checked
+        var errorMsg = popup.querySelector(".age-guard-error");
+        if (errorMsg) errorMsg.remove();
+      }
+
+      // Validate DOB if method is dob
+      if (verification.method === "dob") {
+        var inputs = popup.querySelectorAll(".age-guard-fields input");
+        var dd = parseInt(inputs[0] && inputs[0].value, 10);
+        var mm = parseInt(inputs[1] && inputs[1].value, 10);
+        var yyyy = parseInt(inputs[2] && inputs[2].value, 10);
+        var existing = popup.querySelector(".age-guard-error");
+        if (!dd || !mm || !yyyy || yyyy < 1900 || yyyy > new Date().getFullYear()) {
+          if (!existing) {
+            var error = document.createElement("p");
+            error.className = "age-guard-error";
+            error.textContent = "Please enter a valid date of birth.";
+            error.style.color = "#d72c0d";
+            error.style.fontSize = "13px";
+            error.style.margin = "0";
+            error.style.textAlign = "center";
+            buttonRow.parentNode.insertBefore(error, buttonRow);
+          }
+          return;
+        }
+        var dob = new Date(yyyy, mm - 1, dd);
+        var today = new Date();
+        var age = today.getFullYear() - dob.getFullYear() - (today < new Date(today.getFullYear(), dob.getMonth(), dob.getDate()) ? 1 : 0);
+        if (age < verification.minimumAge) {
+          if (!existing) {
+            var error = document.createElement("p");
+            error.className = "age-guard-error";
+            error.textContent = "You must be " + verification.minimumAge + "+ to enter.";
+            error.style.color = "#d72c0d";
+            error.style.fontSize = "13px";
+            error.style.margin = "0";
+            error.style.textAlign = "center";
+            buttonRow.parentNode.insertBefore(error, buttonRow);
+          }
+          return;
+        }
+        if (existing) existing.remove();
+      }
+
+      // Validate age input if method is age-input
+      if (verification.method === "age-input") {
+        var ageVal = parseInt(popup.querySelector(".age-guard-fields input") && popup.querySelector(".age-guard-fields input").value, 10);
+        var existing = popup.querySelector(".age-guard-error");
+        if (!ageVal || ageVal < verification.minimumAge) {
+          if (!existing) {
+            var error = document.createElement("p");
+            error.className = "age-guard-error";
+            error.textContent = "You must be " + verification.minimumAge + "+ to enter.";
+            error.style.color = "#d72c0d";
+            error.style.fontSize = "13px";
+            error.style.margin = "0";
+            error.style.textAlign = "center";
+            buttonRow.parentNode.insertBefore(error, buttonRow);
+          }
+          return;
+        }
+        if (existing) existing.remove();
+      }
+
       setCookie(cookieName, verification.rememberDays);
       postEvent(root.dataset.eventEndpoint, { shop: root.dataset.shop, outcome: "pass", page: window.location.pathname });
       overlay.remove();
