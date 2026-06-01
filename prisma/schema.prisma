@@ -47,8 +47,10 @@ model VerificationEvent {
   outcome   String
   page      String?
   country   String?
+  city      String?
   createdAt DateTime @default(now())
 
   @@index([shop, createdAt])
   @@index([shop, outcome])
+  @@index([shop, country])
 }

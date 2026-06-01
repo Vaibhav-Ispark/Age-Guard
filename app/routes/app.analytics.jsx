@@ -287,12 +287,7 @@ export default function Analytics() {
           {analytics.pages.length ? (
             <table className="ag-table">
               <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Page</th>
-                  <th>Views</th>
-                  <th>Share</th>
-                </tr>
+                <tr><th>#</th><th>Page</th><th>Views</th><th>Share</th></tr>
               </thead>
               <tbody>
                 {analytics.pages.map((page, i) => {
@@ -304,9 +299,7 @@ export default function Analytics() {
                       <td><strong>{page.count.toLocaleString()}</strong></td>
                       <td>
                         <div className="ag-bar-cell">
-                          <div className="ag-bar-track">
-                            <div className="ag-bar-fill" style={{ width: `${pct}%` }} />
-                          </div>
+                          <div className="ag-bar-track"><div className="ag-bar-fill" style={{ width: `${pct}%` }} /></div>
                           <span>{pct}%</span>
                         </div>
                       </td>
@@ -316,12 +309,76 @@ export default function Analytics() {
               </tbody>
             </table>
           ) : (
-            <div className="ag-empty-state">
-              <span>📊</span>
-              <p>No analytics data yet. The popup needs to be shown to visitors first.</p>
-            </div>
+            <div className="ag-empty-state"><span>📊</span><p>No analytics data yet.</p></div>
           )}
         </section>
+
+        {/* Geo tables */}
+        <div className="ag-analytics-geo-grid">
+          <section className="ag-card">
+            <div className="ag-analytics-card-header">
+              <h2>🌍 Top countries</h2>
+              <span className="ag-analytics-badge">{analytics.countries.length}</span>
+            </div>
+            {analytics.countries.length ? (
+              <table className="ag-table">
+                <thead><tr><th>#</th><th>Country</th><th>Views</th><th>Share</th></tr></thead>
+                <tbody>
+                  {analytics.countries.map((row, i) => {
+                    const pct = Math.round((row.count / (analytics.countries[0]?.count || 1)) * 100);
+                    return (
+                      <tr key={row.country} className="ag-table-row-hover">
+                        <td className="ag-table-rank">{i + 1}</td>
+                        <td><strong>{row.country}</strong></td>
+                        <td>{row.count.toLocaleString()}</td>
+                        <td>
+                          <div className="ag-bar-cell">
+                            <div className="ag-bar-track"><div className="ag-bar-fill ag-bar-fill--green" style={{ width: `${pct}%` }} /></div>
+                            <span>{pct}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <div className="ag-empty-state"><span>🌍</span><p>No country data yet.</p></div>
+            )}
+          </section>
+
+          <section className="ag-card">
+            <div className="ag-analytics-card-header">
+              <h2>🏙️ Top cities</h2>
+              <span className="ag-analytics-badge">{analytics.cities.length}</span>
+            </div>
+            {analytics.cities.length ? (
+              <table className="ag-table">
+                <thead><tr><th>#</th><th>City</th><th>Views</th><th>Share</th></tr></thead>
+                <tbody>
+                  {analytics.cities.map((row, i) => {
+                    const pct = Math.round((row.count / (analytics.cities[0]?.count || 1)) * 100);
+                    return (
+                      <tr key={row.city} className="ag-table-row-hover">
+                        <td className="ag-table-rank">{i + 1}</td>
+                        <td>{row.city}</td>
+                        <td>{row.count.toLocaleString()}</td>
+                        <td>
+                          <div className="ag-bar-cell">
+                            <div className="ag-bar-track"><div className="ag-bar-fill ag-bar-fill--purple" style={{ width: `${pct}%` }} /></div>
+                            <span>{pct}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <div className="ag-empty-state"><span>🏙️</span><p>No city data yet.</p></div>
+            )}
+          </section>
+        </div>
       </div>
     </div>
   );

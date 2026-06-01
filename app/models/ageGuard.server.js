@@ -233,6 +233,8 @@ export async function getAnalytics(shop, days = 30) {
   }
 
   const pages = new Map();
+  const countries = new Map();
+  const cities = new Map();
   let pass = 0;
   let block = 0;
 
@@ -248,6 +250,15 @@ export async function getAnalytics(shop, days = 30) {
 
     const page = event.page || "/";
     pages.set(page, (pages.get(page) || 0) + 1);
+
+    if (event.country) {
+      countries.set(event.country, (countries.get(event.country) || 0) + 1);
+    }
+
+    if (event.city) {
+      const cityKey = event.city + (event.country ? `, ${event.country}` : "");
+      cities.set(cityKey, (cities.get(cityKey) || 0) + 1);
+    }
   }
 
   return {
@@ -256,6 +267,14 @@ export async function getAnalytics(shop, days = 30) {
     block,
     pages: [...pages.entries()]
       .map(([page, count]) => ({ page, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10),
+    countries: [...countries.entries()]
+      .map(([country, count]) => ({ country, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10),
+    cities: [...cities.entries()]
+      .map(([city, count]) => ({ city, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10),
   };
