@@ -24,7 +24,7 @@ api_version = "2026-07"
 scopes = "read_customers,write_themes"
 
 [auth]
-redirect_urls = [ "https://age-guard.vercel.app/api/auth" ]
+redirect_urls = [ "https://age-guard.vercel.app/auth/callback", "https://age-guard.vercel.app/api/auth" ]
 
 [app_proxy]
 url = "https://age-guard.vercel.app/age-guard"
