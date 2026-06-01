@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { useFetcher, useLoaderData, useLocation } from "react-router";
+import { useState } from "react";
+import { useLoaderData, useLocation } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import {
   getAgeGuardConfig,
   getDashboardStats,
-  saveAgeGuardConfig,
 } from "../models/ageGuard.server";
 import { LivePreview, PreviewModal } from "../components/AgeGuardPreview";
 
@@ -17,32 +16,11 @@ export const loader = async ({ request }) => {
   return { config, stats };
 };
 
-export const action = async ({ request }) => {
-  const { session } = await authenticate.admin(request);
-  const formData = await request.formData();
-  const enabled = formData.get("enabled") === "true";
-
-  await saveAgeGuardConfig(session.shop, { enabled });
-  return { ok: true, enabled };
-};
-
 export default function Dashboard() {
   const { config, stats } = useLoaderData();
   const { search } = useLocation();
-  const fetcher = useFetcher();
-  const [enabled, setEnabled] = useState(config.enabled);
   const [device, setDevice] = useState("desktop");
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (fetcher.data?.ok) window.shopify?.toast?.show("Popup status saved");
-  }, [fetcher.data]);
-
-  function toggleEnabled(event) {
-    const next = event.target.checked;
-    setEnabled(next);
-    fetcher.submit({ enabled: String(next) }, { method: "POST" });
-  }
 
   return (
     <div className="ag-admin-page">
@@ -58,22 +36,15 @@ export default function Dashboard() {
       <div className="ag-page-grid">
         <div className="ag-settings-main">
           <section className="ag-card ag-hero-card">
-            <div className="ag-toggle-row">
+            <div className="ag-hero-info">
+              <div className="ag-hero-icon">🛡️</div>
               <div>
-                <h2>Popup status</h2>
+                <h2>Age Verification Active</h2>
                 <p>
-                  Enable the storefront age gate. Visitors who are not verified
-                  cannot access the site.
+                  The age gate is controlled via the theme editor. Enable or disable it
+                  under <strong>Online Store → Themes → Customize → App embeds</strong>.
                 </p>
               </div>
-              <label className="ag-switch">
-                <input
-                  checked={enabled}
-                  type="checkbox"
-                  onChange={toggleEnabled}
-                />
-                <span>{enabled ? "Enabled" : "Disabled"}</span>
-              </label>
             </div>
             <div className="ag-row-actions">
               <button
@@ -106,17 +77,51 @@ export default function Dashboard() {
               <strong>{stats.blocked}</strong>
             </section>
           </div>
+
+          <section className="ag-card ag-quick-links">
+            <h2>Quick links</h2>
+            <div className="ag-quick-grid">
+              <a className="ag-quick-item" href={`/app/settings/design${search}`}>
+                <span className="ag-quick-icon">🎨</span>
+                <div>
+                  <strong>Design</strong>
+                  <p>Popup style, colors, logo</p>
+                </div>
+              </a>
+              <a className="ag-quick-item" href={`/app/settings/verification${search}`}>
+                <span className="ag-quick-icon">✅</span>
+                <div>
+                  <strong>Verification</strong>
+                  <p>Method, age rules, cookies</p>
+                </div>
+              </a>
+              <a className="ag-quick-item" href={`/app/settings/typography${search}`}>
+                <span className="ag-quick-icon">✏️</span>
+                <div>
+                  <strong>Typography</strong>
+                  <p>Fonts, text, heading styles</p>
+                </div>
+              </a>
+              <a className="ag-quick-item" href={`/app/analytics${search}`}>
+                <span className="ag-quick-icon">📊</span>
+                <div>
+                  <strong>Analytics</strong>
+                  <p>Verification stats & reports</p>
+                </div>
+              </a>
+            </div>
+          </section>
         </div>
 
         <LivePreview
-          enabled={enabled}
+          enabled={true}
           settings={config.settings}
           device={device}
           onDeviceChange={setDevice}
         />
       </div>
       <PreviewModal
-        enabled={enabled}
+        enabled={true}
         open={modalOpen}
         settings={config.settings}
         onClose={() => setModalOpen(false)}

@@ -5,11 +5,12 @@ export const loader = async ({ request }) => {
   const shop = url.searchParams.get("shop");
 
   if (!shop) {
-    return Response.json({ enabled: false, settings: null }, { headers: corsHeaders() });
+    return Response.json({ enabled: true, settings: null }, { headers: corsHeaders() });
   }
 
   const config = await getAgeGuardConfig(shop);
-  return Response.json(config, { headers: corsHeaders() });
+  // Always enabled — on/off is controlled via the theme editor App Embeds toggle
+  return Response.json({ ...config, enabled: true }, { headers: corsHeaders() });
 };
 
 function corsHeaders() {
